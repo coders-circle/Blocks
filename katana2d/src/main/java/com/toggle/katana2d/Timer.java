@@ -32,6 +32,7 @@ public class Timer {
         // get current and delta times
         long currentTime = nanoTime();
         long deltaTime = currentTime - mLastTime;
+        mLastTime = currentTime;
         mFrameCounter++;
         mSecondCounter += deltaTime;
 
@@ -42,7 +43,11 @@ public class Timer {
         }
 
         float dt = deltaTime/(float)ONE_SECOND;
-        callback.update(dt);
+
+        float updateDt = dt;
+        if (dt > 1/2)
+            updateDt = OPTIMAL_TIME;
+        callback.update(updateDt);
 
         float difference = OPTIMAL_TIME - dt;
         if (difference > 4000/ONE_SECOND)    // we were too fast, deltaTime << OPTIMAL_TIME

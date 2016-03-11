@@ -9,6 +9,9 @@ public class MainActivity extends GameActivity {
     public void onGamePreStart() {
         Game game = getGame();
         game.getRenderer().setBackgroundColor(100.0f / 255, 149.0f / 255, 237.0f / 255);
+
+        MainScene mainScene = new MainScene();
+        game.setActiveScene(game.addScene(mainScene));
     }
 
     @Override

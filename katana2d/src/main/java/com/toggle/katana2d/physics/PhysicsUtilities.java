@@ -77,27 +77,6 @@ public class PhysicsUtilities {
         return output;
     }
 
-    public static List<Vector2> parsePoints(String string, boolean meters,
-                                            float offsetX, float offsetY) {
-        // Regex matching to get every x, y
-        Pattern pattern = Pattern.compile("(\\-?\\d+\\.?\\d*),?\\s*(\\-?\\d+\\.?\\d*)");
-        Matcher matcher = pattern.matcher(string);
-
-        List<Vector2> vertices = new ArrayList<>();
-        while (matcher.find()) {
-            float x = Float.parseFloat(matcher.group(1)) - offsetX;
-            float y = Float.parseFloat(matcher.group(2)) - offsetY;
-
-            if (meters) {
-                x *= PhysicsSystem.METERS_PER_PIXEL;
-                y *= PhysicsSystem.METERS_PER_PIXEL;
-            }
-
-            vertices.add(new Vector2(x, y));
-        }
-        return vertices;
-    }
-
     public static void scale(List<Vector2> points, float scaleX, float scaleY) {
         for (Vector2 p: points) {
             p.x *= scaleX;

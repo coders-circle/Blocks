@@ -9,6 +9,7 @@ public class Sprite implements Component{
     public float scaleX = 1, scaleY = 1;
     public boolean visible = true;
     public boolean postDrawn = false;
+    public float z = 0;
 
     public Sprite(Texture texture) {
         this.texture = texture;
@@ -128,7 +129,7 @@ public class Sprite implements Component{
                 texture.color[3]*mixColor[3]
         };
         if (spriteSheetData == null)
-            texture.draw(renderer, x, y, 0, angle, scaleX, scaleY);
+            texture.draw(renderer, x, y, -z, angle, scaleX, scaleY);
         else {
             Sprite.SpriteSheetData ssd = spriteSheetData;
 
@@ -138,7 +139,7 @@ public class Sprite implements Component{
             float clipX = (ssd.imgWidth + ssd.hSpacing) * col + ssd.offsetX;
             float clipY = (ssd.imgHeight + ssd.vSpacing) * row + ssd.offsetY;
 
-            texture.draw(renderer, x, y, 0, angle, scaleX, scaleY, clipX, clipY,
+            texture.draw(renderer, x, y, -z, angle, scaleX, scaleY, clipX, clipY,
                     ssd.imgWidth, ssd.imgHeight);
         }
         texture.color = color;

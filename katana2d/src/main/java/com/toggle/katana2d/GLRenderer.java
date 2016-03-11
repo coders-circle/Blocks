@@ -310,8 +310,12 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
         if (enablePostProcessing)
             GLES20.glViewport(0, 0, devWidth, devHeight);
-        else
+        else {
             GLES20.glViewport((int) cx, (int) cy, (int) (width * scale), (int) (height * scale));
+            GLES20.glClearColor(0, 0, 0, 1.0f);
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+            GLES20.glEnable(GLES20.GL_SCISSOR_TEST);
+        }
 
         // View transformations
         Matrix.setIdentityM(mViewMatrix, 0);
@@ -358,8 +362,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         mGame.postDraw();
     }
 
-    public final int width = 580, height = 320;
-    public int devWidth = 580, devHeight = 320;
+    public final int width = 480, height = 800;
+    public int devWidth = 480, devHeight = 800;
 
     public Camera getCamera() { return mCamera; }
 
