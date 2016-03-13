@@ -1,8 +1,5 @@
 package com.toggle.katana2d;
 
-
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 

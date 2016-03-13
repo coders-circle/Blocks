@@ -9,7 +9,6 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
-import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -93,7 +92,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     public int mFuzzyTextureId;
 
     // Camera to defining view position and angle
-    private Camera mCamera = new Camera();
+    private Viewport mViewport = new Viewport();
 
     private float mBackR, mBackG, mBackB;
     // Set background color
@@ -320,9 +319,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         // View transformations
         Matrix.setIdentityM(mViewMatrix, 0);
         Matrix.translateM(mViewMatrix, 0, width / 2, height / 2, 0);
-        Matrix.rotateM(mViewMatrix, 0, mCamera.angle, 0, 0, 1);
+        Matrix.rotateM(mViewMatrix, 0, mViewport.angle, 0, 0, 1);
         Matrix.translateM(mViewMatrix, 0, -width / 2, -height / 2, 0);
-        Matrix.translateM(mViewMatrix, 0, -mCamera.x, -mCamera.y, 0);
+        Matrix.translateM(mViewMatrix, 0, -mViewport.x, -mViewport.y, 0);
 
         if (enablePostProcessing)
             GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFbo);
@@ -365,7 +364,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     public final int width = 480, height = 800;
     public int devWidth = 480, devHeight = 800;
 
-    public Camera getCamera() { return mCamera; }
+    public Viewport getCamera() { return mViewport; }
 
     private float cx = 0, cy = 0;
     private float scale = 1;
@@ -614,8 +613,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     }
 
     public void centerCamera(float x, float y, float maxWidth, float maxHeight) {
-        mCamera.x = Math.min(Math.max(width / 2, x), maxWidth - width / 2) - width / 2;
-        mCamera.y = Math.min(Math.max(height / 2, y), maxHeight - height / 2) - height / 2;
+        mViewport.x = Math.min(Math.max(width / 2, x), maxWidth - width / 2) - width / 2;
+        mViewport.y = Math.min(Math.max(height / 2, y), maxHeight - height / 2) - height / 2;
     }
 }
 
