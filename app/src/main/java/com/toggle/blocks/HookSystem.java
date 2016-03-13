@@ -17,7 +17,7 @@ import com.toggle.katana2d.physics.PhysicsSystem;
  */
 public class HookSystem extends com.toggle.katana2d.System {
     private GameState mGameState;
-    public final static float HOOK_LENGTH = 128;
+    public final static float HOOK_LENGTH = 200;
 
     public HookSystem(GameState gameState) {
         super(new Class[]{Hook.class, PhysicsBody.class});

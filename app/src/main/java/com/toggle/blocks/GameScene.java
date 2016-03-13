@@ -48,7 +48,7 @@ public class GameScene extends Scene implements BlockCreator {
         Entity ground = new Entity();
         ground.add(new Transformation(renderer.width / 2, renderer.height-64, 0));
         ground.add(new Sprite(
-                renderer.addTexture(new float[]{0.4f, 0.4f, 0.4f, 1}, renderer.width, 128f)
+                renderer.addTexture(R.drawable.ground, renderer.width, 128f)
         ));
         ground.add(new PhysicsBody(mPhysicsSystem.getWorld(),
         BodyDef.BodyType.StaticBody, ground, new PhysicsBody.Properties(0.0f)));
@@ -63,7 +63,8 @@ public class GameScene extends Scene implements BlockCreator {
 
         // Create a block texture to be used for every block generated.
         mGame.textureManager.add("BlockTexture",
-                renderer.addTexture(new float[]{0.2f, 0.2f, 0.2f, 1}, 90, 60));
+                renderer.addTexture(R.drawable.block, 80, 100));
+        //addTexture(R.drawable.my_image, width, height)
     }
 
     /**
