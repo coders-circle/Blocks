@@ -5,22 +5,26 @@ import com.toggle.katana2d.*;
 import com.toggle.katana2d.physics.PhysicsBody;
 import com.toggle.katana2d.physics.PhysicsSystem;
 
-public class GameScene extends Scene {
+/**
+ * The main game scene.
+ */
+public class GameScene extends Scene implements BlockCreator {
 
-    private Texture blockTexture;
-    private PhysicsSystem physicsSystem;
-
-    private GameState mGameState = new GameState();
-
+    private PhysicsSystem mPhysicsSystem;
+    private Hook mHook;
+    private GameState mGameState;
 
     @Override
     public void onInit() {
-        GLRenderer renderer = mGame.getRenderer();
-        physicsSystem = new PhysicsSystem();
 
-        // Add the systems
+        // Add the systems:
+
+        mPhysicsSystem = new PhysicsSystem();
+        mGameState = new GameState(mGame, mPhysicsSystem.getWorld(), this);
+        GLRenderer renderer = mGame.getRenderer();
+
         mSystems.add(new RenderSystem(mGame.getRenderer()));
-        mSystems.add(physicsSystem);
+        mSystems.add(mPhysicsSystem);
         mSystems.add(new HookSystem(mGameState));
         mSystems.add(new CameraSystem(mGameState));
         mSystems.add(new ScoreSystem(mGameState));
@@ -28,19 +32,50 @@ public class GameScene extends Scene {
         mSystems.add(new BlockSystem(mGameState));
 
 
-        // Block entity
-        blockTexture = renderer.addTexture(new float[]{0.2f, 0.2f, 0.2f, 1}, 90, 60);
-        createBlock(renderer.width/2-128, 128f);
+        // Add the entities:
 
+        // Ceiling entity.
+        Entity ceiling = new Entity();
+        ceiling.add(new Transformation(renderer.width/2, 0, 0));
+        ceiling.add(new Sprite(
+                renderer.addTexture(new float[]{0,0,0,1}, renderer.width, 8f)
+        ));
+        ceiling.add(new PhysicsBody(mPhysicsSystem.getWorld(),
+                BodyDef.BodyType.StaticBody, ceiling, new PhysicsBody.Properties(0.0f)));
+        addEntity(ceiling);
+
+        // Ground entity.
+        Entity ground = new Entity();
+        ground.add(new Transformation(renderer.width / 2, renderer.height-64, 0));
+        ground.add(new Sprite(
+                renderer.addTexture(new float[]{0.4f, 0.4f, 0.4f, 1}, renderer.width, 128f)
+        ));
+        ground.add(new PhysicsBody(mPhysicsSystem.getWorld(),
+        BodyDef.BodyType.StaticBody, ground, new PhysicsBody.Properties(0.0f)));
+        addEntity(ground);
+
+        // Hook entity.
+        Entity hook = new Entity();
+        HookSystem.initHookEntity(mGameState, hook);
+        mHook = hook.get(Hook.class);
+        addEntity(hook);
+
+
+        // Create a block texture to be used for every block generated.
+        mGame.textureManager.add("BlockTexture",
+                renderer.addTexture(new float[]{0.2f, 0.2f, 0.2f, 1}, 90, 60));
     }
 
+    /**
+     * Create a new block at given position.
+     * @param x X-coordinate of position to create new block at.
+     * @param y Y-coordinate of position to create new block at.
+     */
     public void createBlock(float x, float y) {
         Entity block = new Entity();
-        block.add(new Transformation(x, y + 10, 0));
-        block.add(new Sprite(blockTexture));
-        block.add(new PhysicsBody(physicsSystem.getWorld(), BodyDef.BodyType.DynamicBody,
-                block, new PhysicsBody.Properties(0.2f, 0.8f, 0.0f, false, false)));
-        block.get(PhysicsBody.class).body.setAngularDamping(50f);
+        BlockSystem.initBlockEntity(mGameState, block, x, y);
         addEntity(block);
+
+        mHook.attachBlock(block);
     }
 }

@@ -10,7 +10,7 @@ public class Texture {
 
     // default size and origin of the texture
     // origin is in normalized system: [0..1]
-    public float width, height, originX = 0.5f, originY=0.5f;
+    public float width, height, originX = 0.5f, originY = 0.5f;
 
     // draw the texture
     public void draw(GLRenderer renderer,float x, float y, float z, float angle,

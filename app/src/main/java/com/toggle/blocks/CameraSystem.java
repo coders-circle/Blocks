@@ -2,6 +2,10 @@ package com.toggle.blocks;
 
 import com.toggle.katana2d.*;
 
+/**
+ * Camera system handles the camera entity.
+ * Major job includes scrolling the viewport as block falls.
+ */
 public class CameraSystem extends com.toggle.katana2d.System {
     private GameState mGameState;
 

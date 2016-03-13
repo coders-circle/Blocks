@@ -2,6 +2,9 @@ package com.toggle.blocks;
 
 import com.toggle.katana2d.*;
 
+/**
+ * GameEnvironment is the system that handles environmental states.
+ */
 public class GameEnvironment extends com.toggle.katana2d.System {
     private GameState mGameState;
 
