@@ -79,7 +79,7 @@ public class HookSystem extends com.toggle.katana2d.System {
 
         // Sprite and Transformation components.
         Texture hookTexture = renderer.addTexture(
-                new float[]{0.7f, 0.7f, 0.0f, 1}, 10f, HOOK_LENGTH);
+                new float[]{0.8f, 0.8f, 0.8f, 1}, 2.0f, HOOK_LENGTH);
         hookTexture.originY = 0;
         entity.add(new Sprite(hookTexture));
         entity.add(new Transformation(renderer.width / 2, 0, 0));

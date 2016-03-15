@@ -63,7 +63,7 @@ public class GameScene extends Scene implements BlockCreator {
 
         // Create a block texture to be used for every block generated.
         mGame.textureManager.add("BlockTexture",
-                renderer.addTexture(R.drawable.block, 80, 100));
+                renderer.addTexture(R.drawable.block, 100, 100));
         //addTexture(R.drawable.my_image, width, height)
     }
 
