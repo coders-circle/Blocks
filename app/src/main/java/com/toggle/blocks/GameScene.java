@@ -46,12 +46,15 @@ public class GameScene extends Scene implements BlockCreator {
 
         // Ground entity.
         Entity ground = new Entity();
-        ground.add(new Transformation(renderer.width / 2, renderer.height-64, 0));
+        ground.add(new Transformation(renderer.width / 2, renderer.height-32, 0));
         ground.add(new Sprite(
                 renderer.addTexture(R.drawable.ground, renderer.width, 128f)
         ));
+        ground.get(Sprite.class).texture.originY = 0.75f;
         ground.add(new PhysicsBody(mPhysicsSystem.getWorld(),
-        BodyDef.BodyType.StaticBody, ground, new PhysicsBody.Properties(0.0f)));
+                BodyDef.BodyType.StaticBody, ground,
+                renderer.width, 64f,
+                new PhysicsBody.Properties(0.0f)));
         addEntity(ground);
 
         // Hook entity.
@@ -63,8 +66,8 @@ public class GameScene extends Scene implements BlockCreator {
 
         // Create a block texture to be used for every block generated.
         mGame.textureManager.add("BlockTexture",
-                renderer.addTexture(R.drawable.block, 100, 100));
-        //addTexture(R.drawable.my_image, width, height)
+                renderer.addTexture(R.drawable.block, 110, 100));
+        mGame.textureManager.get("BlockTexture").originY = 0.6f;
     }
 
     /**

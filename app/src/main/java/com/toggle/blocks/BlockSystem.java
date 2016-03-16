@@ -28,7 +28,7 @@ public class BlockSystem extends com.toggle.katana2d.System {
             Transformation transformation = entity.get(Transformation.class);
 
             if (mGameState.activeBlock == entity) {
-                // If an active block has fallen for some height (say half of screen),
+                // If an active block has fallen for some height,
                 // set active block to null
                 // so that next block can then be generated.
 
@@ -48,10 +48,11 @@ public class BlockSystem extends com.toggle.katana2d.System {
      * @param y Y-Coordinate of position of hte block.
      */
     public static void initBlockEntity(GameState gameState, Entity entity, float x, float y) {
-        entity.add(new Transformation(x, y + 10, 0));
+        entity.add(new Transformation(x, y + 55, 0));
         entity.add(new Sprite(gameState.game.textureManager.get("BlockTexture")));
         entity.add(new PhysicsBody(gameState.world, BodyDef.BodyType.DynamicBody,
-                entity, new PhysicsBody.Properties(0.2f, 0.8f, 0.0f, false, false)));
+                entity, 110, 90,
+                new PhysicsBody.Properties(0.2f, 0.8f, 0.0f, false, false)));
         entity.get(PhysicsBody.class).body.setAngularDamping(50f);
         entity.add(new Block());
     }

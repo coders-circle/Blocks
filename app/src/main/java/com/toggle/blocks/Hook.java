@@ -48,7 +48,8 @@ public class Hook implements Component {
 
             DistanceJointDef dJointDef = new DistanceJointDef();
             dJointDef.initialize(hookBody, blockBody,
-                    hookBody.getWorldPoint(mHookPoint), blockBody.getWorldCenter());
+                    hookBody.getWorldPoint(mHookPoint),
+                    blockBody.getWorldPoint(new Vector2(0, -45*PhysicsSystem.METERS_PER_PIXEL)));
             dJointDef.collideConnected = false;
 
             RevoluteJointDef rJointDef = new RevoluteJointDef();
