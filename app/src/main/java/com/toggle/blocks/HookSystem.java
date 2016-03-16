@@ -17,7 +17,7 @@ import com.toggle.katana2d.physics.PhysicsSystem;
  */
 public class HookSystem extends com.toggle.katana2d.System {
     private GameState mGameState;
-    public final static float HOOK_LENGTH = 200;
+    public final static float HOOK_LENGTH = 250;
 
     public HookSystem(GameState gameState) {
         super(new Class[]{Hook.class, PhysicsBody.class});
@@ -79,9 +79,10 @@ public class HookSystem extends com.toggle.katana2d.System {
 
         // Sprite and Transformation components.
         Texture hookTexture = renderer.addTexture(
-                new float[]{0.7f, 0.7f, 0.0f, 1}, 10f, HOOK_LENGTH);
+                new float[]{0.7f, 0.7f, 0.0f, 1}, 5f, HOOK_LENGTH);
         hookTexture.originY = 0;
         entity.add(new Sprite(hookTexture));
+        entity.get(Sprite.class).z = -0.2f;
         entity.add(new Transformation(renderer.width / 2, 0, 0));
 
         // Physics body component.
