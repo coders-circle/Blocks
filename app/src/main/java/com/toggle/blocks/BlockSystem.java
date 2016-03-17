@@ -1,5 +1,7 @@
 package com.toggle.blocks;
 
+import android.util.Log;
+
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.toggle.katana2d.*;
@@ -21,23 +23,36 @@ public class BlockSystem extends com.toggle.katana2d.System {
 
     @Override
     public void update(float dt) {
+        Entity topBlock = null;
+        float top = 999999;
+
         for (Entity entity: mEntities) {
 
             Block block = entity.get(Block.class);
             Body body = entity.get(PhysicsBody.class).body;
             Transformation transformation = entity.get(Transformation.class);
 
-            if (mGameState.activeBlock == entity) {
-                // If an active block has fallen for some height,
-                // set active block to null
+            if (mGameState.fallingBlock == entity) {
+                // If a block has fallen for some height,
+                // set falling block to null
                 // so that next block can then be generated.
 
-                if (transformation.y > mGameState.game.getRenderer().height/2) {
-                    mGameState.activeBlock = null;
+                GLRenderer renderer = mGameState.game.getRenderer();
+                if (transformation.y > renderer.getCamera().y + renderer.height/2) {
+                    mGameState.fallingBlock = null;
                 }
             }
 
+            if (mGameState.hangingBlock != entity) {
+                // Find out the topmost block.
+                if (transformation.y < top) {
+                    topBlock = entity;
+                    top = transformation.y;
+                }
+            }
         }
+
+        mGameState.topBlock = topBlock;
     }
 
     /**

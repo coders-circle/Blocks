@@ -34,16 +34,6 @@ public class GameScene extends Scene implements BlockCreator {
 
         // Add the entities:
 
-        // Ceiling entity.
-        Entity ceiling = new Entity();
-        ceiling.add(new Transformation(renderer.width/2, 0, 0));
-        ceiling.add(new Sprite(
-                renderer.addTexture(new float[]{0,0,0,1}, renderer.width, 8f)
-        ));
-        ceiling.add(new PhysicsBody(mPhysicsSystem.getWorld(),
-                BodyDef.BodyType.StaticBody, ceiling, new PhysicsBody.Properties(0.0f)));
-        addEntity(ceiling);
-
         // Ground entity.
         Entity ground = new Entity();
         ground.add(new Transformation(renderer.width / 2, renderer.height-32, 0));
@@ -75,11 +65,12 @@ public class GameScene extends Scene implements BlockCreator {
      * @param x X-coordinate of position to create new block at.
      * @param y Y-coordinate of position to create new block at.
      */
-    public void createBlock(float x, float y) {
+    public Entity createBlock(float x, float y) {
         Entity block = new Entity();
         BlockSystem.initBlockEntity(mGameState, block, x, y);
         addEntity(block);
 
         mHook.attachBlock(block);
+        return block;
     }
 }

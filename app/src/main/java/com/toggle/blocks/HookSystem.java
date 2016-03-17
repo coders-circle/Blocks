@@ -1,5 +1,7 @@
 package com.toggle.blocks;
 
+import android.util.Log;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -14,13 +16,14 @@ import com.toggle.katana2d.physics.PhysicsSystem;
  *  - Moving with pendulum motion.
  *  - Throwing a block when touch feedback is provided.
  *  - Generating next block when there is no actively falling block.
+ *  - Scrolling the hook.
  */
 public class HookSystem extends com.toggle.katana2d.System {
     private GameState mGameState;
     public final static float HOOK_LENGTH = 250;
 
     public HookSystem(GameState gameState) {
-        super(new Class[]{Hook.class, PhysicsBody.class});
+        super(new Class[]{Hook.class, PhysicsBody.class, Transformation.class});
         mGameState = gameState;
     }
 
@@ -29,6 +32,9 @@ public class HookSystem extends com.toggle.katana2d.System {
         for (Entity entity: mEntities) {
             Hook hook = entity.get(Hook.class);
             Body body = entity.get(PhysicsBody.class).body;
+            Transformation transformation = entity.get(Transformation.class);
+
+            mGameState.hangingBlock = hook.getAttachedBlock();
 
             // Simple pendulum motion.
             // Angular acceleration = - g/R sin(theta)
@@ -45,23 +51,52 @@ public class HookSystem extends com.toggle.katana2d.System {
 
 
             // Generate next block when there is no block in the hook
-            // and no active block (which just started to fall)
+            // and no active block
             // and the hook is almost straight (less than 4 degrees).
 
             if (hook.getAttachedBlock() == null &&
-                    mGameState.activeBlock == null &&
+                    mGameState.fallingBlock == null &&
                     Math.abs(body.getAngle()) < Math.toRadians(4)) {
                 Vector2 point = new Vector2(body.getWorldPoint(hook.getHookPoint())).scl(
                         PhysicsSystem.PIXELS_PER_METER);
-                mGameState.blockCreator.createBlock(point.x, point.y);
+                mGameState.hangingBlock = mGameState.blockCreator.createBlock(point.x, point.y);
+                mGameState.blocks++;
             }
 
             // Touch to remove the block joint.
 
             TouchInputData inputData = mGameState.game.getTouchInputData();
             if (inputData.pointers.size() > 0 && hook.getAttachedBlock() != null) {
-                mGameState.activeBlock = hook.getAttachedBlock();
+                mGameState.hangingBlock = null;
+                mGameState.fallingBlock = hook.getAttachedBlock();
                 hook.removeBlock();
+            }
+
+            // Scroll the hook to maintain distance to the last block.
+
+            boolean scrolling = false;
+            if (mGameState.topBlock != null) {
+                float topBlockY = mGameState.topBlock.get(Transformation.class).y;
+                float myY = transformation.y;
+                float scrHeight = mGameState.game.getRenderer().height;
+
+                // If too less distance, set upward velocity.
+                if (topBlockY - myY < 3*scrHeight/4) {
+                    body.setLinearVelocity(0, -32*PhysicsSystem.METERS_PER_PIXEL);
+                    mGameState.cameraSpeedY = -32;
+                    scrolling = true;
+                }
+                // If too much distance, set downward velocity.
+                else if (myY < 0 && topBlockY - myY > 3*scrHeight/4) {
+                    body.setLinearVelocity(0, 32*PhysicsSystem.METERS_PER_PIXEL);
+                    mGameState.cameraSpeedY = 32;
+                    scrolling = true;
+                }
+            }
+
+            if (!scrolling) {
+                body.setLinearVelocity(0, 0);
+                mGameState.cameraSpeedY = 0;
             }
         }
     }
