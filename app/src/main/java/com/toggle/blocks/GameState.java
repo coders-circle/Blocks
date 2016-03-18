@@ -18,9 +18,11 @@ public class GameState {
     public final BlockCreator blockCreator;
 
     // Current state of the game represented by different objects and properties:
-
-    // Actively falling block. When null, the hook may generate another block.
-    public Entity activeBlock = null;
+    public float cameraSpeedY = 0;
+    public long blocks = 0;
+    public Entity topBlock;
+    public Entity hangingBlock = null;
+    public Entity fallingBlock = null;
 
     public GameState(Game game, World world, BlockCreator blockCreator) {
         this.game = game;
