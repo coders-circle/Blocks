@@ -10,7 +10,6 @@ import com.toggle.katana2d.physics.PhysicsSystem;
  */
 public class GameScene extends Scene implements BlockCreator {
 
-    private PhysicsSystem mPhysicsSystem;
     private Hook mHook;
     private GameState mGameState;
 
@@ -19,12 +18,12 @@ public class GameScene extends Scene implements BlockCreator {
 
         // Add the systems:
 
-        mPhysicsSystem = new PhysicsSystem();
-        mGameState = new GameState(mGame, mPhysicsSystem.getWorld(), this);
+        PhysicsSystem physicsSystem = new PhysicsSystem();
+        mGameState = new GameState(mGame, physicsSystem.getWorld(), this);
         GLRenderer renderer = mGame.getRenderer();
 
         mSystems.add(new RenderSystem(mGame.getRenderer()));
-        mSystems.add(mPhysicsSystem);
+        mSystems.add(physicsSystem);
         mSystems.add(new HookSystem(mGameState));
         mSystems.add(new CameraSystem(mGameState));
         mSystems.add(new ScoreSystem(mGameState));
@@ -41,7 +40,7 @@ public class GameScene extends Scene implements BlockCreator {
                 renderer.addTexture(R.drawable.ground, renderer.width, 128f)
         ));
         ground.get(Sprite.class).texture.originY = 0.75f;
-        ground.add(new PhysicsBody(mPhysicsSystem.getWorld(),
+        ground.add(new PhysicsBody(physicsSystem.getWorld(),
                 BodyDef.BodyType.StaticBody, ground,
                 renderer.width, 64f,
                 new PhysicsBody.Properties(0.0f)));

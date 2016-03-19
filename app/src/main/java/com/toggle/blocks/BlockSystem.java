@@ -2,10 +2,15 @@ package com.toggle.blocks;
 
 import android.util.Log;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
+import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import com.toggle.katana2d.*;
 import com.toggle.katana2d.physics.PhysicsBody;
+import com.toggle.katana2d.physics.PhysicsSystem;
 
 
 /**
@@ -28,11 +33,12 @@ public class BlockSystem extends com.toggle.katana2d.System {
 
         for (Entity entity: mEntities) {
 
-            Block block = entity.get(Block.class);
-            Body body = entity.get(PhysicsBody.class).body;
+             Block block = entity.get(Block.class);
+             Body body = entity.get(PhysicsBody.class).body;
             Transformation transformation = entity.get(Transformation.class);
 
             if (mGameState.fallingBlock == entity) {
+
                 // If a block has fallen for some height,
                 // set falling block to null
                 // so that next block can then be generated.
@@ -49,6 +55,39 @@ public class BlockSystem extends com.toggle.katana2d.System {
                     topBlock = entity;
                     top = transformation.y;
                 }
+            }
+
+            // Check if its bottom sensor is colliding with some other body
+            // and if so, check if the bodies are almost linear and create joint if so.
+
+            if (block.collidingBody != null) {
+                if (Math.abs(
+                        block.collidingBody.getAngle() - body.getAngle()) < Math.toRadians(0.8f)) {
+
+                    if (block.bottomJoint == null) {
+
+                            WeldJointDef jointDef = new WeldJointDef();
+                            jointDef.initialize(body, block.collidingBody,
+                                    body.getWorldCenter());
+
+//                            DistanceJointDef jointDef = new DistanceJointDef();
+//                            jointDef.initialize(body, block.collidingBody,
+//                                    body.getWorldCenter(), block.collidingBody.getWorldCenter());
+
+                            jointDef.collideConnected = true;
+
+                            block.bottomJoint = body.getWorld().createJoint(jointDef);
+                    }
+
+                }
+            }
+
+            // Destroy the joint when there's too much tension.
+
+            if (block.bottomJoint != null &&
+                    block.bottomJoint.getReactionTorque(1/dt) > 500) {
+                body.getWorld().destroyJoint(block.bottomJoint);
+                block.bottomJoint = null;
             }
         }
 
@@ -70,5 +109,18 @@ public class BlockSystem extends com.toggle.katana2d.System {
                 new PhysicsBody.Properties(0.2f, 0.8f, 0.0f, false, false)));
         entity.get(PhysicsBody.class).body.setAngularDamping(50f);
         entity.add(new Block());
+
+        // Add some sensors at the top and bottom of the block.
+
+        PhysicsBody body = entity.get(PhysicsBody.class);
+        Block block = entity.get(Block.class);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8*PhysicsSystem.METERS_PER_PIXEL, 8*PhysicsSystem.METERS_PER_PIXEL,
+                new Vector2(0, 110*PhysicsSystem.METERS_PER_PIXEL), 0);
+        block.bottomSensor = body.createSensor(shape);
+
+        block.initialize(body);
+
     }
 }

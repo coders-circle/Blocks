@@ -28,6 +28,11 @@ public class Hook implements Component {
     // The point where the block is joint to the hook.
     private Vector2 mHookPoint;
 
+    /**
+     * Construct the hook.
+     * @param entity The entity that contains this Hook component.
+     * @param hookPoint The point where blocks are attached in local coordinates of the hook.
+     */
     public Hook(Entity entity, Vector2 hookPoint) {
         mEntity = entity;
         mHookPoint = new Vector2(hookPoint).scl(PhysicsSystem.METERS_PER_PIXEL);
@@ -37,7 +42,10 @@ public class Hook implements Component {
     public float getHookLength() { return mHookPoint.len(); }
     public Vector2 getHookPoint() { return mHookPoint; }
 
-    // Attach a block to the hook.
+    /**
+     * Attach a block to the hook.
+     * @param block Block entity to attach.
+     */
     public void attachBlock(Entity block) {
         removeBlock();
         mBlock = block;
@@ -61,7 +69,10 @@ public class Hook implements Component {
         }
     }
 
-    // Remove an attached block from the hook.
+
+    /**
+     * Remove an attached block from the hook.
+     */
     public void removeBlock() {
         if (mDistanceJoint != null) {
             Body hookBody = mEntity.get(PhysicsBody.class).body;
