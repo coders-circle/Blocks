@@ -24,6 +24,12 @@ public class GameState {
     public Entity hangingBlock = null;
     public Entity fallingBlock = null;
 
+    /**
+     * Construct a new GameState object.
+     * @param game The Game object for which object represent states.
+     * @param world The Box2D World where the game bodies will be created and destroyed.
+     * @param blockCreator The block creator that create new block entities.
+     */
     public GameState(Game game, World world, BlockCreator blockCreator) {
         this.game = game;
         this.world = world;
