@@ -33,16 +33,24 @@ public class GameScene extends Scene implements BlockCreator {
 
         // Add the entities:
 
+        Entity background = new Entity();
+        //Texture bgtex = mGame.getRenderer().addTexture(R.drawable.ground, renderer.width, renderer.height);
+        //background.add(new Background(bgtex, 10));
+        background.add(new Sprite(
+                renderer.addTexture(R.drawable.sky, renderer.width, renderer.height)
+        ));
+        addEntity(background);
+
         // Ground entity.
         Entity ground = new Entity();
-        ground.add(new Transformation(renderer.width / 2, renderer.height-32, 0));
+        ground.add(new Transformation(renderer.width / 2, renderer.height-10, 0));
         ground.add(new Sprite(
-                renderer.addTexture(R.drawable.ground, renderer.width, 128f)
+                renderer.addTexture(R.drawable.ground, renderer.width, 100f)
         ));
-        ground.get(Sprite.class).texture.originY = 0.75f;
+        //ground.get(Sprite.class).texture.originY = 0.75f;
         ground.add(new PhysicsBody(physicsSystem.getWorld(),
                 BodyDef.BodyType.StaticBody, ground,
-                renderer.width, 64f,
+                renderer.width, 100f,
                 new PhysicsBody.Properties(0.0f)));
         addEntity(ground);
 
@@ -52,11 +60,10 @@ public class GameScene extends Scene implements BlockCreator {
         mHook = hook.get(Hook.class);
         addEntity(hook);
 
-
         // Create a block texture to be used for every block generated.
         mGame.textureManager.add("BlockTexture",
-                renderer.addTexture(R.drawable.block, 110, 100));
-        mGame.textureManager.get("BlockTexture").originY = 0.6f;
+                renderer.addTexture(R.drawable.block, 100, 60));
+        //mGame.textureManager.get("BlockTexture").originY = 0.6f;
     }
 
     /**

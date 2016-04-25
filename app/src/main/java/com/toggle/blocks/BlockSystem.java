@@ -102,10 +102,10 @@ public class BlockSystem extends com.toggle.katana2d.System {
      * @param y Y-Coordinate of position of hte block.
      */
     public static void initBlockEntity(GameState gameState, Entity entity, float x, float y) {
-        entity.add(new Transformation(x, y + 55, 0));
+        entity.add(new Transformation(x, y + 30, 0));
         entity.add(new Sprite(gameState.game.textureManager.get("BlockTexture")));
         entity.add(new PhysicsBody(gameState.world, BodyDef.BodyType.DynamicBody,
-                entity, 110, 90,
+                entity, 100, 60,
                 new PhysicsBody.Properties(0.2f, 0.8f, 0.0f, false, false)));
         entity.get(PhysicsBody.class).body.setAngularDamping(50f);
         entity.add(new Block());
@@ -116,8 +116,7 @@ public class BlockSystem extends com.toggle.katana2d.System {
         Block block = entity.get(Block.class);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8*PhysicsSystem.METERS_PER_PIXEL, 8*PhysicsSystem.METERS_PER_PIXEL,
-                new Vector2(0, 110*PhysicsSystem.METERS_PER_PIXEL), 0);
+        shape.setAsBox(0, 0, new Vector2(0, 30*PhysicsSystem.METERS_PER_PIXEL), 0);
         block.bottomSensor = body.createSensor(shape);
 
         block.initialize(body);
