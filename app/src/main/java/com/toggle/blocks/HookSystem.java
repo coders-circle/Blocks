@@ -18,7 +18,9 @@ import com.toggle.katana2d.physics.PhysicsSystem;
  */
 public class HookSystem extends com.toggle.katana2d.System {
     private GameState mGameState;
-    public final static float HOOK_LENGTH = 250;
+    public final static float HOOK_LENGTH = 600;
+    public final static float HOOK_OFFSET = 400;
+    // effective length  = HOOK_LENGTH - HOOK_OFFSET
 
     public HookSystem(GameState gameState) {
         super(new Class[]{Hook.class, PhysicsBody.class, Transformation.class});
@@ -40,10 +42,10 @@ public class HookSystem extends com.toggle.katana2d.System {
             float g = body.getWorld().getGravity().y;
             float R = hook.getHookLength();
             float theta = body.getAngle();
-            float acceleration = - g / R * (float)Math.sin(theta);
+            float acceleration = - 2*g / R * (float)Math.sin(theta);
 
             if (acceleration == 0)
-                body.setAngularVelocity(1f);                    // initial velocity
+                body.setAngularVelocity(0.1f);                    // initial velocity
             else
                 body.setAngularVelocity(body.getAngularVelocity()+acceleration*dt);
 
@@ -75,7 +77,7 @@ public class HookSystem extends com.toggle.katana2d.System {
             boolean scrolling = false;
             if (mGameState.topBlock != null) {
                 float topBlockY = mGameState.topBlock.get(Transformation.class).y;
-                float myY = transformation.y;
+                float myY = transformation.y + HOOK_OFFSET;
                 float scrHeight = mGameState.game.getRenderer().height;
 
                 // If too less distance, set upward velocity.
@@ -112,11 +114,11 @@ public class HookSystem extends com.toggle.katana2d.System {
 
         // Sprite and Transformation components.
         Texture hookTexture = renderer.addTexture(
-                new float[]{0.7f, 0.7f, 0.0f, 1}, 5f, HOOK_LENGTH);
+                new float[]{0.8f, 0.8f, 0.8f, 1}, 2f, HOOK_LENGTH);
         hookTexture.originY = 0;
         entity.add(new Sprite(hookTexture));
         entity.get(Sprite.class).z = -0.2f;
-        entity.add(new Transformation(renderer.width / 2, 0, 0));
+        entity.add(new Transformation(renderer.width / 2, -HOOK_OFFSET, 0));
 
         // Physics body component.
         PolygonShape hookShape = new PolygonShape();
