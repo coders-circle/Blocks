@@ -80,16 +80,18 @@ public class HookSystem extends com.toggle.katana2d.System {
                 float myY = transformation.y + HOOK_OFFSET;
                 float scrHeight = mGameState.game.getRenderer().height;
 
+                float distance = (topBlockY - myY) - 3*scrHeight/4;
+
                 // If too less distance, set upward velocity.
-                if (topBlockY - myY < 3*scrHeight/4) {
-                    body.setLinearVelocity(0, -32*PhysicsSystem.METERS_PER_PIXEL);
-                    mGameState.cameraSpeedY = -32;
+                if (distance < 0) {
+                    body.setLinearVelocity(0, distance*PhysicsSystem.METERS_PER_PIXEL);
+                    mGameState.cameraSpeedY = distance;
                     scrolling = true;
                 }
                 // If too much distance, set downward velocity.
-                else if (myY < 0 && topBlockY - myY > 3*scrHeight/4) {
-                    body.setLinearVelocity(0, 32*PhysicsSystem.METERS_PER_PIXEL);
-                    mGameState.cameraSpeedY = 32;
+                else if (myY < 0 && distance > 0) {
+                    body.setLinearVelocity(0, distance*PhysicsSystem.METERS_PER_PIXEL);
+                    mGameState.cameraSpeedY = distance;
                     scrolling = true;
                 }
             }

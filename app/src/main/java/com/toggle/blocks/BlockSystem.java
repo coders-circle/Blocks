@@ -53,7 +53,8 @@ public class BlockSystem extends com.toggle.katana2d.System {
             if (mGameState.hangingBlock != entity) {
 
                 // Check if the block has stabilized, at least once.
-                if (!block.hasFallen && body.getLinearVelocity().len2() < 0.5f) {
+                if (!block.hasFallen && body.getLinearVelocity().len2() < 0.5f
+                        && mGameState.fallingBlock != entity) {
                     block.hasFallen = true;
                 }
 
@@ -92,7 +93,7 @@ public class BlockSystem extends com.toggle.katana2d.System {
             // Destroy the joint when there's too much tension.
 
             if (block.bottomJoint != null &&
-                    block.bottomJoint.getReactionTorque(1 / dt) > 500) {
+                    block.bottomJoint.getReactionTorque(1 / dt) > 300) {
                 body.getWorld().destroyJoint(block.bottomJoint);
                 block.bottomJoint = null;
             }
