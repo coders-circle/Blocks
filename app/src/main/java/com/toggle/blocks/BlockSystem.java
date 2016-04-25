@@ -33,8 +33,8 @@ public class BlockSystem extends com.toggle.katana2d.System {
 
         for (Entity entity: mEntities) {
 
-             Block block = entity.get(Block.class);
-             Body body = entity.get(PhysicsBody.class).body;
+            Block block = entity.get(Block.class);
+            Body body = entity.get(PhysicsBody.class).body;
             Transformation transformation = entity.get(Transformation.class);
 
             if (mGameState.fallingBlock == entity) {
@@ -49,9 +49,16 @@ public class BlockSystem extends com.toggle.katana2d.System {
                 }
             }
 
+
             if (mGameState.hangingBlock != entity) {
+
+                // Check if the block has stabilized, at least once.
+                if (!block.hasFallen && body.getLinearVelocity().len2() < 0.5f) {
+                    block.hasFallen = true;
+                }
+
                 // Find out the topmost block.
-                if (transformation.y < top) {
+                if (transformation.y < top && block.hasFallen) {
                     topBlock = entity;
                     top = transformation.y;
                 }
@@ -85,7 +92,7 @@ public class BlockSystem extends com.toggle.katana2d.System {
             // Destroy the joint when there's too much tension.
 
             if (block.bottomJoint != null &&
-                    block.bottomJoint.getReactionTorque(1/dt) > 500) {
+                    block.bottomJoint.getReactionTorque(1 / dt) > 500) {
                 body.getWorld().destroyJoint(block.bottomJoint);
                 block.bottomJoint = null;
             }
