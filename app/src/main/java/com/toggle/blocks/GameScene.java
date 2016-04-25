@@ -29,16 +29,18 @@ public class GameScene extends Scene implements BlockCreator {
         mSystems.add(new ScoreSystem(mGameState));
         mSystems.add(new GameEnvironment(mGameState));
         mSystems.add(new BlockSystem(mGameState));
+        mSystems.add(new BackgroundSystem(mGame.getRenderer()));
 
+        // Set background color (to appear after sky disappears) to black.
+        mGame.getRenderer().setBackgroundColor(0, 0, 0);
 
         // Add the entities:
 
+        // Sky background.
         Entity background = new Entity();
-        //Texture bgtex = mGame.getRenderer().addTexture(R.drawable.ground, renderer.width, renderer.height);
-        //background.add(new Background(bgtex, 10));
-        background.add(new Sprite(
-                renderer.addTexture(R.drawable.sky, renderer.width, renderer.height)
-        ));
+        Texture bgTex = mGame.getRenderer().addTexture(R.drawable.sky,
+                640, 200, 1, 10);   // Image is 640 x 2000 and 2000 = 200*10.
+        background.add(new Background(bgTex, 80, 0, -(2000-mGame.getRenderer().height)));
         addEntity(background);
 
         // Ground entity.

@@ -24,6 +24,12 @@ public class GameState {
     public Entity hangingBlock = null;
     public Entity fallingBlock = null;
 
+    // Current topmost block height.
+    public int currentHeight;
+
+    // Maximum height achieved till now.
+    public int score;
+
     /**
      * Construct a new GameState object.
      * @param game The Game object for which object represent states.

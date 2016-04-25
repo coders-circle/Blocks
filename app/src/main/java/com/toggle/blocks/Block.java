@@ -26,6 +26,9 @@ public class Block implements Component {
     // This value is useful in endContact-listener to find when to reset collision state.
     public int collideCount = 0;
 
+    // Whether the block has fallen and stabilize at least once.
+    public boolean hasFallen = false;
+
     /**
      * Initialize the block with contact listener that handles joint creation.
      * @param body PhysicsBody of the entity containing this Block component, whose contactListener
