@@ -37,11 +37,30 @@ public class GameScene extends Scene implements BlockCreator {
         // Add the entities:
 
         // Sky background.
-        Entity background = new Entity();
-        Texture bgTex = mGame.getRenderer().addTexture(R.drawable.sky,
+        Entity sky = new Entity();
+        Texture skyTex = mGame.getRenderer().addTexture(R.drawable.sky,
                 640, 200, 1, 10);   // Image is 640 x 2000 and 2000 = 200*10.
-        background.add(new Background(bgTex, 80, 0, -(2000-mGame.getRenderer().height)));
-        addEntity(background);
+        sky.add(new Background(skyTex, 100, 0, -(2000 - mGame.getRenderer().height)));
+        addEntity(sky);
+
+        // Mountains
+        Entity mountain0 = new Entity();
+        Texture mountainTex0 = mGame.getRenderer().addTexture(R.drawable.m0,
+                500, 1000, 2, 1);
+        mountain0.add(new Background(mountainTex0, 90, 0, -(mGame.getRenderer().height-800)));
+        addEntity(mountain0);
+
+        Entity mountain1 = new Entity();
+        Texture mountainTex1 = mGame.getRenderer().addTexture(R.drawable.m1,
+                250, 1000, 4, 1);
+        mountain1.add(new Background(mountainTex1, 85, 0, -(mGame.getRenderer().height-800)));
+        addEntity(mountain1);
+
+        Entity mountain2 = new Entity();
+        Texture mountainTex2 = mGame.getRenderer().addTexture(R.drawable.m2,
+                500, 1000, 2, 1);
+        mountain2.add(new Background(mountainTex2, 80, 0, -(mGame.getRenderer().height-800)));
+        addEntity(mountain2);
 
         // Ground entity.
         Entity ground = new Entity();
